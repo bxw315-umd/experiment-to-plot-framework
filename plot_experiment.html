@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Given an experiment, provide all plots for examining one variable at a time.">
+
+<title>plot_experiment – experiment-to-plot-framework</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e16dd29f819a46fcdaa82e3575888691.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="plot_experiment – experiment-to-plot-framework">
+<meta property="og:description" content="Given an experiment, provide all plots for examining one variable at a time.">
+<meta property="og:image" content="https://bxw315-umd.github.io/experiment-to-plot-framework/01_plot_experiment_files/figure-html/cell-32-output-1.png">
+<meta property="og:site_name" content="experiment-to-plot-framework">
+<meta property="og:image:height" content="482">
+<meta property="og:image:width" content="625">
+<meta name="twitter:title" content="plot_experiment – experiment-to-plot-framework">
+<meta name="twitter:description" content="Given an experiment, provide all plots for examining one variable at a time.">
+<meta name="twitter:image" content="https://bxw315-umd.github.io/experiment-to-plot-framework/01_plot_experiment_files/figure-html/cell-32-output-1.png">
+<meta name="twitter:image-height" content="482">
+<meta name="twitter:image-width" content="625">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">experiment-to-plot-framework</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./plot_experiment.html">plot_experiment</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">experiment-to-plot-framework</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./plot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">plot</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./plot_experiment.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">plot_experiment</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#process_file" id="toc-process_file" class="nav-link active" data-scroll-target="#process_file">process_file</a></li>
+  <li><a href="#palmsens_postprocessor" id="toc-palmsens_postprocessor" class="nav-link" data-scroll-target="#palmsens_postprocessor">palmsens_postprocessor</a></li>
+  <li><a href="#palmsens_read" id="toc-palmsens_read" class="nav-link" data-scroll-target="#palmsens_read">palmsens_read</a></li>
+  <li><a href="#chi_postprocessor" id="toc-chi_postprocessor" class="nav-link" data-scroll-target="#chi_postprocessor">chi_postprocessor</a></li>
+  <li><a href="#chi_read" id="toc-chi_read" class="nav-link" data-scroll-target="#chi_read">chi_read</a></li>
+  <li><a href="#generate_plot_vars" id="toc-generate_plot_vars" class="nav-link" data-scroll-target="#generate_plot_vars">generate_plot_vars</a></li>
+  <li><a href="#generate_plot_vars_len_two_helper" id="toc-generate_plot_vars_len_two_helper" class="nav-link" data-scroll-target="#generate_plot_vars_len_two_helper">generate_plot_vars_len_two_helper</a></li>
+  <li><a href="#inverse_fpath_to_vars" id="toc-inverse_fpath_to_vars" class="nav-link" data-scroll-target="#inverse_fpath_to_vars">inverse_fpath_to_vars</a></li>
+  <li><a href="#assign_colors" id="toc-assign_colors" class="nav-link" data-scroll-target="#assign_colors">assign_colors</a></li>
+  <li><a href="#experimentplotter" id="toc-experimentplotter" class="nav-link" data-scroll-target="#experimentplotter">ExperimentPlotter</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="plot_experiment.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">plot_experiment</h1>
+</div>
+
+<div>
+  <div class="description">
+    Given an experiment, provide all plots for examining one variable at a time.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>We can motivate this library by generating plots for a simple experiment, various levels of IAA concentration. This is a CHI dataset.</p>
+<div id="cell-3" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>iaa_mnge_root <span class="op">=</span> <span class="st">"../test_data/iaa_mnge"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>os.listdir(iaa_mnge_root)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>['IAA_7.8125uM_MNGE_GCE_2_250206.txt',
+ 'IAA_62.5uM_MNGE_GCE_2_250206.txt',
+ 'IAA_31.25uM_MNGE_GCE_2_250206.txt',
+ 'IAA_15.625uM_MNGE_GCE_2_250206.txt']</code></pre>
+</div>
+</div>
+<div id="cell-4" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fpath <span class="op">=</span> os.path.join(iaa_mnge_root)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(os.path.join(fpath, <span class="st">"IAA_7.8125uM_MNGE_GCE_2_250206.txt"</span>)) <span class="im">as</span> f:</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    contents <span class="op">=</span> f.read()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>output_dict <span class="op">=</span> parse_chi_file(contents)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>output_dict[<span class="st">"numeric_data"</span>] <span class="op">=</span> {k: v[:<span class="dv">5</span>] <span class="cf">for</span> k, v <span class="kw">in</span> output_dict[<span class="st">"numeric_data"</span>].items()} <span class="co"># truncate the numeric data just for better display</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>output_dict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'memo': {'timestamp': '2025-02-06T17:35:06',
+  'technique': 'Differential Pulse Voltammetry',
+  'file': 'iaa_7.8125um_mnge_gce_2_250206.bin',
+  'instrument_model': 'CHI1040C'},
+ 'parameters': {'Init E (V)': 0.2,
+  'Final E (V)': 1.0,
+  'Incr E (V)': 0.002,
+  'Amplitude (V)': 0.025,
+  'Pulse Width (sec)': 0.05,
+  'Sample Width (sec)': 0.0167,
+  'Pulse Period (sec)': 0.5,
+  'Quiet Time (sec)': 2.0,
+  'Sensitivity (A/V)': 1e-06},
+ 'numeric_data': {'Potential/V': array([0.202, 0.204, 0.206, 0.208, 0.21 ]),
+  'Current/A': array([-6.596e-07, -6.557e-07, -6.549e-07, -6.547e-07, -6.545e-07])}}</code></pre>
+</div>
+</div>
+<p>The objective is to create an interface where the user defines 1. the files that need to be parsed within a dataset 2. how we map each reading to an experimental condition</p>
+<p>The system automatically figures out which parser to use, based on the file extension (CHI is .txt and Palmsens is .csv). Then it 1. reads in the file data according to the specified files 2. maps each measurement to experimental condition according to the user map 3. calculates all plots required to cover one variable experimental plotting</p>
+<p>Architecturally, we can have the user define a map that takes in a file path and maps it to a tuple, assuming there’s only one measurement within the file. This provides all files as well as the mapping to experimental conditions at the same time <strong>This means files with multiple measurements are not yet supported.</strong></p>
+<div id="cell-7" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fpath_to_experimental_vars <span class="op">=</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: <span class="fl">7.8125</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: <span class="fl">62.5</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: <span class="fl">31.25</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: <span class="fl">15.625</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we just build the class that takes this in</p>
+<div id="cell-9" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExperimentPlotter:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        fpath_to_experimental_vars: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">any</span> <span class="kw">or</span> <span class="bu">tuple</span>] <span class="co"># mapping from fpath to experimental variables (if there's only one), or a tuple of experimental variables</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    ):</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># save experimental vars</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fpath_to_experimental_vars <span class="op">=</span> _load_fpath_to_experimental_vars(fpath_to_experimental_vars)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># normal function</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ExperimentPlotter(fpath_to_experimental_vars).fpath_to_experimental_vars <span class="op">==</span> {<span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">7.8125</span>,),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">62.5</span>,),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">31.25</span>,),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">15.625</span>,)}</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># error when expt vars isn't a consistent shape</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>test_fail(<span class="kw">lambda</span>: ExperimentPlotter({<span class="st">"a.csv"</span>: <span class="dv">1</span>, <span class="st">"b.csv"</span>: <span class="dv">2</span>, <span class="st">"c.csv"</span>: (<span class="dv">1</span>, <span class="dv">2</span>)}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>That covers user input. Now, we need to read in the file data. If it’s a .txt file, we read and parse CHI, asserting that there’s only one channel’s-worth of information. IF it’s a .csv file, we parse Palmsens, asserting that there’s only one measurement in the file.</p>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L66" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="process_file" class="level3">
+<h3 class="anchored" data-anchor-id="process_file">process_file</h3>
+<blockquote class="blockquote">
+<pre><code> process_file (fpath)</code></pre>
+</blockquote>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fpath</td>
+<td></td>
+<td>Potentiostat output file (.csv for Palmsens or .txt for CHI)</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>dict</strong></td>
+<td><strong>dictionary with <code>"potential</code> (potential in V) and <code>"current"</code> (current in A)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L58" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="palmsens_postprocessor" class="level3">
+<h3 class="anchored" data-anchor-id="palmsens_postprocessor">palmsens_postprocessor</h3>
+<blockquote class="blockquote">
+<pre><code> palmsens_postprocessor (parser_output)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L54" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="palmsens_read" class="level3">
+<h3 class="anchored" data-anchor-id="palmsens_read">palmsens_read</h3>
+<blockquote class="blockquote">
+<pre><code> palmsens_read (fpath)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L47" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="chi_postprocessor" class="level3">
+<h3 class="anchored" data-anchor-id="chi_postprocessor">chi_postprocessor</h3>
+<blockquote class="blockquote">
+<pre><code> chi_postprocessor (parser_output)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L43" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="chi_read" class="level3">
+<h3 class="anchored" data-anchor-id="chi_read">chi_read</h3>
+<blockquote class="blockquote">
+<pre><code> chi_read (fpath)</code></pre>
+</blockquote>
+<div id="cell-16" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># testing on CHI</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fpath <span class="op">=</span> <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>chi_output <span class="op">=</span> {k: v[:<span class="dv">5</span>] <span class="cf">for</span> k, v <span class="kw">in</span> process_file(os.path.join(iaa_mnge_root, fpath)).items()}</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>test(chi_output, {<span class="st">'potential'</span>: np.array([<span class="fl">0.202</span>, <span class="fl">0.204</span>, <span class="fl">0.206</span>, <span class="fl">0.208</span>, <span class="fl">0.21</span> ]), <span class="st">'current'</span>: np.array([<span class="op">-</span><span class="fl">6.733e-07</span>, <span class="op">-</span><span class="fl">6.715e-07</span>, <span class="op">-</span><span class="fl">6.721e-07</span>, <span class="op">-</span><span class="fl">6.728e-07</span>, <span class="op">-</span><span class="fl">6.733e-07</span>])}, all_equal)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># testing on Palmsens</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>fpath <span class="op">=</span> <span class="st">"../test_data/iaa_m9_pH/250211_Blank_M9_pH5_GCE_DPV.csv"</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>ps_output <span class="op">=</span> {k: v[:<span class="dv">5</span>] <span class="cf">for</span> k, v <span class="kw">in</span> process_file(fpath).items()}</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>test(ps_output, {<span class="st">'potential'</span>: np.array([<span class="fl">0.</span>        , <span class="fl">0.01020757</span>, <span class="fl">0.02041514</span>, <span class="fl">0.03062271</span>, <span class="fl">0.04083028</span>]), <span class="st">'current'</span>: np.array([<span class="fl">2.1246306e-08</span>, <span class="fl">2.0322310e-08</span>, <span class="fl">1.9476714e-08</span>, <span class="fl">1.9017516e-08</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>       <span class="fl">1.8608716e-08</span>])}, all_equal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So we’ve got the code that reads in the data. We’ve got the map. Now we need the code that generates the files we need according to experimental parameters</p>
+<p>For instance, if we had concentrations [0, 5, 10, 15], then it should be a single plot with all of them in order [(0, 5, 10, 15)]. If we had two variables, we might have experimental value tuples of [(0, 5), (5, 5), (10, 5), (0, 6), (5, 6), (10, 6), (0, 7), (5, 7), (10, 7)] where each tuple represents (concentration, pH). In other words, it’d be a grid of concentrations of [0, 5, 10] and pHs of [5, 6, 7]. Then it’d would be</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>[</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    [(<span class="dv">0</span>, <span class="dv">5</span>), (<span class="dv">5</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">5</span>)], <span class="co"># change conc, pH=5</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    [(<span class="dv">0</span>, <span class="dv">6</span>), (<span class="dv">5</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">6</span>)], <span class="co"># change conc, pH=6</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    [(<span class="dv">0</span>, <span class="dv">7</span>), (<span class="dv">5</span>, <span class="dv">7</span>), (<span class="dv">10</span>, <span class="dv">7</span>)], <span class="co"># change conc, pH=7</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    [(<span class="dv">0</span>, <span class="dv">5</span>), (<span class="dv">0</span>, <span class="dv">6</span>), (<span class="dv">0</span>, <span class="dv">7</span>)], <span class="co"># conc=0, change pH</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    [(<span class="dv">5</span>, <span class="dv">5</span>), (<span class="dv">5</span>, <span class="dv">6</span>), (<span class="dv">5</span>, <span class="dv">7</span>)], <span class="co"># conc=5, change pH</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    [(<span class="dv">10</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">7</span>)] <span class="co"># conc=10, change pH</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In other words, for each unique variable value within a dimension, keep that dimension constant and then change the other one. To keep it simple, we’re only supporting a max of two experimental variables. Three is uncommon and requires a more generalized algorithm.</p>
+<p>So, we’re making an algorithm that takes in all the tuples generated by mapping. if tuples are only len 1, then just sort them and that’s the job done. If tuples are len 2, then go through the first dimension’s unique values and group everything that way. Then do the analogous operation on the other dimension.</p>
+<div id="cell-20" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>single_tuple_list <span class="op">=</span> [(<span class="dv">3</span>,), (<span class="dv">8</span>,), (<span class="dv">7</span>,), (<span class="dv">1</span>,), (<span class="dv">5</span>,)]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>experimental_tuples <span class="op">=</span> single_tuple_list</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># if it's len 1, then just sort by that single dimension. and there's only one plot</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>plot_combos <span class="op">=</span> [<span class="bu">sorted</span>(<span class="bu">set</span>(single_tuple_list), key<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="dv">0</span>])] <span class="co"># the set part is to remove duplicates</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>plot_combos</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[[(1,), (3,), (5,), (7,), (8,)]]</code></pre>
+</div>
+</div>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>double_tuple_list <span class="op">=</span> [(<span class="dv">0</span>, <span class="dv">5</span>), (<span class="dv">5</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">7</span>), (<span class="dv">5</span>, <span class="dv">7</span>), (<span class="dv">0</span>, <span class="dv">7</span>), (<span class="dv">0</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">6</span>), (<span class="dv">5</span>, <span class="dv">6</span>)]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>experimental_tuples <span class="op">=</span> np.array(double_tuple_list)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># zero-th column is the one we're sorting on. this is just an example to get started. the example covers the first column only</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>unique_col, other_col <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>unique_var, var_indices <span class="op">=</span> np.unique(experimental_tuples[:, <span class="dv">0</span>], axis<span class="op">=</span><span class="dv">0</span>, return_inverse<span class="op">=</span><span class="va">True</span>) <span class="co"># unique values for the first column</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>current_plot_list <span class="op">=</span> experimental_tuples[var_indices <span class="op">==</span> <span class="dv">0</span>].tolist()</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>current_plot_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[[0, 5], [0, 7], [0, 6]]</code></pre>
+</div>
+</div>
+<div id="cell-22" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># now sort it and make it tuples</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>([<span class="bu">tuple</span>(x) <span class="cf">for</span> x <span class="kw">in</span> current_plot_list], key<span class="op">=</span><span class="kw">lambda</span> x: x[other_col]) <span class="co"># this is the output we want</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[(0, 5), (0, 6), (0, 7)]</code></pre>
+</div>
+</div>
+<div id="cell-23" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plot_list <span class="op">=</span> []</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(unique_var)):</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    current_plot_list <span class="op">=</span> experimental_tuples[var_indices <span class="op">==</span> i].tolist()</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    current_plot_list <span class="op">=</span> <span class="bu">sorted</span>([<span class="bu">tuple</span>(x) <span class="cf">for</span> x <span class="kw">in</span> current_plot_list], key<span class="op">=</span><span class="kw">lambda</span> x: x[other_col])</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    plot_list.append(current_plot_list)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>plot_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[[(0, 5), (0, 6), (0, 7)],
+ [(5, 5), (5, 6), (5, 7)],
+ [(10, 5), (10, 6), (10, 7)]]</code></pre>
+</div>
+</div>
+<p>we’ve built up all plots in terms of their experimental variables for the first column (concentration), now we just switch the values for unique_col and other col to get the plots for the second column</p>
+<div id="cell-25" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>unique_col, other_col <span class="op">=</span> <span class="dv">1</span>, <span class="dv">0</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>unique_var, var_indices <span class="op">=</span> np.unique(experimental_tuples[:, unique_col], axis<span class="op">=</span><span class="dv">0</span>, return_inverse<span class="op">=</span><span class="va">True</span>) <span class="co"># unique values for unique_col</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>plot_list <span class="op">=</span> []</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(unique_var)):</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    current_plot_list <span class="op">=</span> experimental_tuples[var_indices <span class="op">==</span> i].tolist()</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    current_plot_list <span class="op">=</span> <span class="bu">sorted</span>([<span class="bu">tuple</span>(x) <span class="cf">for</span> x <span class="kw">in</span> current_plot_list], key<span class="op">=</span><span class="kw">lambda</span> x: x[other_col])</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    plot_list.append(current_plot_list)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>plot_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[[(0, 5), (5, 5), (10, 5)],
+ [(0, 6), (5, 6), (10, 6)],
+ [(0, 7), (5, 7), (10, 7)]]</code></pre>
+</div>
+</div>
+<p>and that’s correct for the second column. which means we can just put everything together and it should work.</p>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L100" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="generate_plot_vars" class="level3">
+<h3 class="anchored" data-anchor-id="generate_plot_vars">generate_plot_vars</h3>
+<blockquote class="blockquote">
+<pre><code> generate_plot_vars (var_tuples:list[tuple])</code></pre>
+</blockquote>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>var_tuples</td>
+<td>list</td>
+<td>list of experimental values tuples. assumed to all have the same length</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L77" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="generate_plot_vars_len_two_helper" class="level3">
+<h3 class="anchored" data-anchor-id="generate_plot_vars_len_two_helper">generate_plot_vars_len_two_helper</h3>
+<blockquote class="blockquote">
+<pre><code> generate_plot_vars_len_two_helper (var_tuples:list[tuple],
+                                    unique_col:int)</code></pre>
+</blockquote>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>var_tuples</td>
+<td>list</td>
+<td>input tuples</td>
+</tr>
+<tr class="even">
+<td>unique_col</td>
+<td>int</td>
+<td>the index of the column to keep constant. either 0 or 1</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-29" class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># single variable case</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> generate_plot_vars([(<span class="dv">3</span>,), (<span class="dv">8</span>,), (<span class="dv">7</span>,), (<span class="dv">1</span>,), (<span class="dv">5</span>,)]) <span class="op">==</span> [[(<span class="dv">1</span>,), (<span class="dv">3</span>,), (<span class="dv">5</span>,), (<span class="dv">7</span>,), (<span class="dv">8</span>,)]]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># another similar case, floats</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> generate_plot_vars([(<span class="fl">1.1</span>,), (<span class="fl">1.5</span>,), (<span class="fl">3.1</span>,), (<span class="fl">0.2</span>,), (<span class="fl">1.7</span>,)]) <span class="op">==</span> [[(<span class="fl">0.2</span>,), (<span class="fl">1.1</span>,), (<span class="fl">1.5</span>,), (<span class="fl">1.7</span>,), (<span class="fl">3.1</span>,)]]</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># with a duplicate (expected behavior is to deduplicate)</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> generate_plot_vars([(<span class="dv">3</span>,), (<span class="dv">3</span>,), (<span class="dv">5</span>,)]) <span class="op">==</span> [[(<span class="dv">3</span>,), (<span class="dv">5</span>,)]]</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># double variable case</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> generate_plot_vars([(<span class="dv">0</span>, <span class="dv">5</span>), (<span class="dv">5</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">7</span>), (<span class="dv">5</span>, <span class="dv">7</span>), (<span class="dv">0</span>, <span class="dv">7</span>), (<span class="dv">0</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">6</span>), (<span class="dv">5</span>, <span class="dv">6</span>)]) <span class="op">==</span> [[(<span class="dv">0</span>, <span class="dv">5</span>), (<span class="dv">0</span>, <span class="dv">6</span>), (<span class="dv">0</span>, <span class="dv">7</span>)],</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">5</span>, <span class="dv">5</span>), (<span class="dv">5</span>, <span class="dv">6</span>), (<span class="dv">5</span>, <span class="dv">7</span>)],</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">10</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">7</span>)],</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">0</span>, <span class="dv">5</span>), (<span class="dv">5</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">5</span>)],</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">0</span>, <span class="dv">6</span>), (<span class="dv">5</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">6</span>)],</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">0</span>, <span class="dv">7</span>), (<span class="dv">5</span>, <span class="dv">7</span>), (<span class="dv">10</span>, <span class="dv">7</span>)]]</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="co"># different case: conc=0 has an additional pH=8, pH=7 is missing its conc=5. in other words, removed (5, 7) and added (0, 8)</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> generate_plot_vars([(<span class="dv">0</span>, <span class="dv">5</span>), (<span class="dv">5</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">7</span>), (<span class="dv">0</span>, <span class="dv">7</span>), (<span class="dv">0</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">6</span>), (<span class="dv">5</span>, <span class="dv">6</span>), (<span class="dv">0</span>, <span class="dv">8</span>)]) <span class="op">==</span> [[(<span class="dv">0</span>, <span class="dv">5</span>), (<span class="dv">0</span>, <span class="dv">6</span>), (<span class="dv">0</span>, <span class="dv">7</span>), (<span class="dv">0</span>, <span class="dv">8</span>)],</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">5</span>, <span class="dv">5</span>), (<span class="dv">5</span>, <span class="dv">6</span>)],</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">10</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">7</span>)],</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">0</span>, <span class="dv">5</span>), (<span class="dv">5</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">5</span>)],</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">0</span>, <span class="dv">6</span>), (<span class="dv">5</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">6</span>)],</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a> [(<span class="dv">0</span>, <span class="dv">7</span>), (<span class="dv">10</span>, <span class="dv">7</span>)]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>fantastic. now that we’ve generated the plots according to vars, we just need to map vars back to files.</p>
+<div id="cell-31" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fpath_to_vars <span class="op">=</span> {<span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">7.8125</span>,),</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">62.5</span>,),</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">31.25</span>,),</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">15.625</span>,)}</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># because one var can have multiple fpaths, reversal is a tad more complicated than reversing keys and values</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>unique_vars, vars_inverse <span class="op">=</span> np.unique(<span class="bu">list</span>(fpath_to_vars.values()), axis<span class="op">=</span><span class="dv">0</span>, return_inverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>unique_vars, vars_inverse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(array([[ 7.8125],
+        [15.625 ],
+        [31.25  ],
+        [62.5   ]]),
+ array([0, 3, 2, 1]))</code></pre>
+</div>
+</div>
+<div id="cell-32" class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>fpaths <span class="op">=</span> np.array(<span class="bu">list</span>(fpath_to_vars.keys()))</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>{<span class="bu">tuple</span>(var): fpaths[vars_inverse <span class="op">==</span> i].tolist() <span class="cf">for</span> i, var <span class="kw">in</span> <span class="bu">enumerate</span>(unique_vars.tolist())}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{(7.8125,): ['IAA_7.8125uM_MNGE_GCE_2_250206.txt'],
+ (15.625,): ['IAA_15.625uM_MNGE_GCE_2_250206.txt'],
+ (31.25,): ['IAA_31.25uM_MNGE_GCE_2_250206.txt'],
+ (62.5,): ['IAA_62.5uM_MNGE_GCE_2_250206.txt']}</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L116" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="inverse_fpath_to_vars" class="level3">
+<h3 class="anchored" data-anchor-id="inverse_fpath_to_vars">inverse_fpath_to_vars</h3>
+<blockquote class="blockquote">
+<pre><code> inverse_fpath_to_vars (fpath_to_vars:dict[str,tuple])</code></pre>
+</blockquote>
+<div id="cell-34" class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> inverse_fpath_to_vars({<span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">7.8125</span>,),</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">62.5</span>,),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">31.25</span>,),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">15.625</span>,)}) <span class="op">==</span> {(<span class="fl">7.8125</span>,): [<span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>],</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a> (<span class="fl">15.625</span>,): [<span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>],</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a> (<span class="fl">31.25</span>,): [<span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>],</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a> (<span class="fl">62.5</span>,): [<span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>]}</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> inverse_fpath_to_vars({<span class="st">"5uM.txt"</span>: (<span class="dv">5</span>,), <span class="st">"5uM (1).txt"</span>: (<span class="dv">5</span>,), <span class="st">"10uM"</span>: (<span class="dv">10</span>,)}) <span class="op">==</span> {(<span class="dv">5</span>,): [<span class="st">'5uM.txt'</span>, <span class="st">'5uM (1).txt'</span>], (<span class="dv">10</span>,): [<span class="st">'10uM'</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And finally, we need to work out some specifics on plotting (coloring when there are multiple lines representing the same vars)</p>
+<div id="cell-36" class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>dev_fpaths_to_vars <span class="op">=</span> {<span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: (<span class="dv">7</span>,), <span class="co"># labeled 7</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: (<span class="dv">7</span>,), <span class="co"># also labeled 7, just to test when multiple fpaths map to a single var</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">31.25</span>,),</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">15.625</span>,)}</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>dev_fpaths_to_vars <span class="op">=</span> {os.path.join(iaa_mnge_root, k): v <span class="cf">for</span> k, v <span class="kw">in</span> dev_fpaths_to_vars.items()}</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>vars_to_fpaths <span class="op">=</span> inverse_fpath_to_vars(dev_fpaths_to_vars)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>vars_to_fpaths</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{(7.0,): ['../test_data/iaa_mnge/IAA_7.8125uM_MNGE_GCE_2_250206.txt',
+  '../test_data/iaa_mnge/IAA_62.5uM_MNGE_GCE_2_250206.txt'],
+ (15.625,): ['../test_data/iaa_mnge/IAA_15.625uM_MNGE_GCE_2_250206.txt'],
+ (31.25,): ['../test_data/iaa_mnge/IAA_31.25uM_MNGE_GCE_2_250206.txt']}</code></pre>
+</div>
+</div>
+<div id="cell-37" class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># now we generate the plots we need to make</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>list_of_plot_vars <span class="op">=</span> <span class="bu">list</span>(dev_fpaths_to_vars.values())</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>to_plot_list <span class="op">=</span> generate_plot_vars(list_of_plot_vars)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>to_plot_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[[(7,), (15.625,), (31.25,)]]</code></pre>
+</div>
+</div>
+<p>and now we need a new function that takes in a plot specified by vars (that’s an element of <code>to_plot_list</code>) as well as vars_to_fpaths and generates the plot</p>
+<div id="cell-39" class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let's do a single element for now</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>to_plot <span class="op">=</span> to_plot_list[<span class="dv">0</span>]</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>current_var <span class="op">=</span> to_plot[<span class="dv">0</span>]</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>fpaths_to_plot <span class="op">=</span> vars_to_fpaths[current_var]</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>fpaths_to_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>['../test_data/iaa_mnge/IAA_7.8125uM_MNGE_GCE_2_250206.txt',
+ '../test_data/iaa_mnge/IAA_62.5uM_MNGE_GCE_2_250206.txt']</code></pre>
+</div>
+</div>
+<div id="cell-40" class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># time to transform them into plot specs</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co"># first, so colors make sense, we actually need to assign colors to all tuples that will be plotted</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>to_plot <span class="co"># map these to colors</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[(7,), (15.625,), (31.25,)]</code></pre>
+</div>
+</div>
+<div id="cell-41" class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> <span class="bu">list</span>(mcd.TABLEAU_COLORS) <span class="co"># these are the colors for the traces</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>colors</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>['tab:blue',
+ 'tab:orange',
+ 'tab:green',
+ 'tab:red',
+ 'tab:purple',
+ 'tab:brown',
+ 'tab:pink',
+ 'tab:gray',
+ 'tab:olive',
+ 'tab:cyan']</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L122" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="assign_colors" class="level3">
+<h3 class="anchored" data-anchor-id="assign_colors">assign_colors</h3>
+<blockquote class="blockquote">
+<pre><code> assign_colors (elements)</code></pre>
+</blockquote>
+<div id="cell-43" class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># normal case</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> assign_colors(to_plot) <span class="op">==</span> {(<span class="dv">7</span>,): <span class="st">'tab:blue'</span>, (<span class="fl">15.625</span>,): <span class="st">'tab:orange'</span>, (<span class="fl">31.25</span>,): <span class="st">'tab:green'</span>}</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># more elements than colors should result in cycling</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> assign_colors(<span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">20</span>))) <span class="op">==</span> {<span class="dv">0</span>: <span class="st">'tab:blue'</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a> <span class="dv">1</span>: <span class="st">'tab:orange'</span>,</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a> <span class="dv">2</span>: <span class="st">'tab:green'</span>,</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a> <span class="dv">3</span>: <span class="st">'tab:red'</span>,</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a> <span class="dv">4</span>: <span class="st">'tab:purple'</span>,</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a> <span class="dv">5</span>: <span class="st">'tab:brown'</span>,</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a> <span class="dv">6</span>: <span class="st">'tab:pink'</span>,</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a> <span class="dv">7</span>: <span class="st">'tab:gray'</span>,</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a> <span class="dv">8</span>: <span class="st">'tab:olive'</span>,</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a> <span class="dv">9</span>: <span class="st">'tab:cyan'</span>,</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>: <span class="st">'tab:blue'</span>,</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a> <span class="dv">11</span>: <span class="st">'tab:orange'</span>,</span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a> <span class="dv">12</span>: <span class="st">'tab:green'</span>,</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a> <span class="dv">13</span>: <span class="st">'tab:red'</span>,</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a> <span class="dv">14</span>: <span class="st">'tab:purple'</span>,</span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a> <span class="dv">15</span>: <span class="st">'tab:brown'</span>,</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a> <span class="dv">16</span>: <span class="st">'tab:pink'</span>,</span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a> <span class="dv">17</span>: <span class="st">'tab:gray'</span>,</span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a> <span class="dv">18</span>: <span class="st">'tab:olive'</span>,</span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a> <span class="dv">19</span>: <span class="st">'tab:cyan'</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>now getting back on track</p>
+<div id="cell-45" class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load fpaths to vars</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>dev_fpaths_to_vars <span class="op">=</span> {<span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: (<span class="dv">7</span>,), <span class="co"># labeled 7</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: (<span class="dv">7</span>,), <span class="co"># also labeled 7, just to test when multiple fpaths map to a single var</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">31.25</span>,),</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">15.625</span>,)}</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>dev_fpaths_to_vars <span class="op">=</span> {os.path.join(iaa_mnge_root, k): v <span class="cf">for</span> k, v <span class="kw">in</span> dev_fpaths_to_vars.items()}</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>fpaths_to_data <span class="op">=</span> {fpath: process_file(fpath) <span class="cf">for</span> fpath <span class="kw">in</span> dev_fpaths_to_vars} <span class="co"># read the data</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>vars_to_fpaths <span class="op">=</span> inverse_fpath_to_vars(dev_fpaths_to_vars) <span class="co"># generate inverse</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>list_of_plot_vars <span class="op">=</span> <span class="bu">list</span>(dev_fpaths_to_vars.values())</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>to_plot_list <span class="op">=</span> generate_plot_vars(list_of_plot_vars)</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>to_plot <span class="op">=</span> to_plot_list[<span class="dv">0</span>]</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> assign_colors(to_plot) <span class="co"># {(7,): 'tab:blue', (15.625,): 'tab:orange', (31.25,): 'tab:green'}</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>current_var <span class="op">=</span> to_plot[<span class="dv">0</span>]</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>fpaths_to_plot <span class="op">=</span> vars_to_fpaths[current_var] <span class="co"># ['../test_data/iaa_mnge/IAA_7.8125uM_MNGE_GCE_2_250206.txt', '../test_data/iaa_mnge/IAA_62.5uM_MNGE_GCE_2_250206.txt']</span></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>fpath_to_plot <span class="op">=</span> fpaths_to_plot[<span class="dv">0</span>] <span class="co"># just the first one</span></span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a><span class="co"># for a trace (a single line on the graph), i need the potential and current data</span></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>current_data_dict <span class="op">=</span> fpaths_to_data[fpath_to_plot]</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>single_trace <span class="op">=</span> [(current_data_dict[<span class="st">"potential"</span>], current_data_dict[<span class="st">"current"</span>]), {<span class="st">"color"</span>: colors[current_var], <span class="st">"label"</span>: <span class="ss">f"</span><span class="sc">{</span>current_var[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> uM"</span>}]</span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>[[arr[:<span class="dv">5</span>] <span class="cf">for</span> arr <span class="kw">in</span> single_trace[<span class="dv">0</span>]], single_trace[<span class="dv">1</span>]] <span class="co"># show a subset of the data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[[array([0.202, 0.204, 0.206, 0.208, 0.21 ]),
+  array([-6.596e-07, -6.557e-07, -6.549e-07, -6.547e-07, -6.545e-07])],
+ {'color': 'tab:blue', 'label': '7 uM'}]</code></pre>
+</div>
+</div>
+<div id="cell-46" class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>mpl_wrapper([single_trace], xlabel<span class="op">=</span><span class="st">"Potential (V)"</span>, ylabel<span class="op">=</span><span class="st">"Current (A)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_plot_experiment_files/figure-html/cell-32-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>and then, in general,</p>
+<div id="cell-48" class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load fpaths to vars</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>dev_fpaths_to_vars <span class="op">=</span> {<span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: (<span class="dv">7</span>,), <span class="co"># labeled 7</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: (<span class="dv">7</span>,), <span class="co"># also labeled 7, just to test when multiple fpaths map to a single var</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">31.25</span>,),</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">15.625</span>,)}</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>dev_fpaths_to_vars <span class="op">=</span> {os.path.join(iaa_mnge_root, k): v <span class="cf">for</span> k, v <span class="kw">in</span> dev_fpaths_to_vars.items()}</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>fpaths_to_data <span class="op">=</span> {fpath: process_file(fpath) <span class="cf">for</span> fpath <span class="kw">in</span> dev_fpaths_to_vars} <span class="co"># read the data</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>vars_to_fpaths <span class="op">=</span> inverse_fpath_to_vars(dev_fpaths_to_vars) <span class="co"># generate inverse</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>list_of_plot_vars <span class="op">=</span> <span class="bu">list</span>(dev_fpaths_to_vars.values())</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>to_plot_list <span class="op">=</span> generate_plot_vars(list_of_plot_vars)</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>all_plot_specs <span class="op">=</span> []</span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> to_plot <span class="kw">in</span> to_plot_list: <span class="co"># to_plot is something like [(7,), (15.625,), (31.25,)], specifying the vars that need to be plotted</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>    current_plot_spec <span class="op">=</span> []</span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>    colors <span class="op">=</span> assign_colors(to_plot) <span class="co"># colors for an individual plot</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> current_var <span class="kw">in</span> to_plot: <span class="co"># current_var is something like (7,), representing the unique var that's being plotted </span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>        fpaths_to_plot <span class="op">=</span> vars_to_fpaths[current_var] <span class="co"># all fpaths with that var combination, e.g. ['../test_data/iaa_mnge/IAA_7.8125uM_MNGE_GCE_2_250206.txt', '../test_data/iaa_mnge/IAA_62.5uM_MNGE_GCE_2_250206.txt']</span></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> fpath_to_plot_i, fpath_to_plot <span class="kw">in</span> <span class="bu">enumerate</span>(fpaths_to_plot):</span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>            current_data_dict <span class="op">=</span> fpaths_to_data[fpath_to_plot] <span class="co"># collect the data</span></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>            kwargs <span class="op">=</span> {<span class="st">"color"</span>: colors[current_var]}</span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> fpath_to_plot_i <span class="op">==</span> <span class="dv">0</span>: <span class="co"># only for the first one do we label, to avoid redundancy in the legend</span></span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>                kwargs <span class="op">|=</span> {<span class="st">"label"</span>: <span class="ss">f"</span><span class="sc">{</span>current_var[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> uM"</span>} <span class="co"># </span><span class="al">NOTE</span><span class="co"> that this is custom code! we want the user to provide a labeling scheme</span></span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>            single_trace <span class="op">=</span> [(current_data_dict[<span class="st">"potential"</span>], current_data_dict[<span class="st">"current"</span>]), kwargs]</span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>            current_plot_spec.append(single_trace)</span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>    all_plot_specs.append(current_plot_spec)</span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a>[[[arr[:<span class="dv">5</span>] <span class="cf">for</span> arr <span class="kw">in</span> trace[<span class="dv">0</span>]], trace[<span class="dv">1</span>]] <span class="cf">for</span> trace <span class="kw">in</span> all_plot_specs[<span class="dv">0</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[[[array([0.202, 0.204, 0.206, 0.208, 0.21 ]),
+   array([-6.596e-07, -6.557e-07, -6.549e-07, -6.547e-07, -6.545e-07])],
+  {'color': 'tab:blue', 'label': '7 uM'}],
+ [[array([0.202, 0.204, 0.206, 0.208, 0.21 ]),
+   array([-6.733e-07, -6.715e-07, -6.721e-07, -6.728e-07, -6.733e-07])],
+  {'color': 'tab:blue'}],
+ [[array([0.202, 0.204, 0.206, 0.208, 0.21 ]),
+   array([-6.862e-07, -6.799e-07, -6.774e-07, -6.759e-07, -6.741e-07])],
+  {'color': 'tab:orange', 'label': '15.625 uM'}],
+ [[array([0.202, 0.204, 0.206, 0.208, 0.21 ]),
+   array([-7.070e-07, -7.018e-07, -6.999e-07, -6.986e-07, -6.975e-07])],
+  {'color': 'tab:green', 'label': '31.25 uM'}]]</code></pre>
+</div>
+</div>
+<div id="cell-49" class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>mpl_wrapper(all_plot_specs[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_plot_experiment_files/figure-html/cell-34-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Putting everying back into ExperimentPlotter,</p>
+<hr>
+<p><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/blob/main/experiment_to_plot_framework/plot_experiment.py#L129" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="experimentplotter" class="level3">
+<h3 class="anchored" data-anchor-id="experimentplotter">ExperimentPlotter</h3>
+<blockquote class="blockquote">
+<pre><code> ExperimentPlotter (fpath_to_experimental_vars:dict[str,any],
+                    label_fn:Callable[[tuple],str]=None)</code></pre>
+</blockquote>
+<p><em>Initialize self. See help(type(self)) for accurate signature.</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fpath_to_experimental_vars</td>
+<td>dict</td>
+<td></td>
+<td>mapping from fpath to experimental variables (if there’s only one), or a tuple of experimental variables</td>
+</tr>
+<tr class="even">
+<td>label_fn</td>
+<td>Callable</td>
+<td>None</td>
+<td>function maps an experimental var tuple to the label that will be displayed in a plot</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-52" class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests, copied from the first time</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co"># normal operation</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>fpath_to_experimental_vars <span class="op">=</span> {</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: <span class="fl">7.8125</span>,</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: <span class="fl">62.5</span>,</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: <span class="fl">31.25</span>,</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: <span class="fl">15.625</span>,</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>fpath_to_experimental_vars <span class="op">=</span> {os.path.join(iaa_mnge_root, k): v <span class="cf">for</span> k, v <span class="kw">in</span> fpath_to_experimental_vars.items()}</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ExperimentPlotter(fpath_to_experimental_vars).fpath_to_experimental_vars <span class="op">==</span> {<span class="st">'../test_data/iaa_mnge/IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">7.8125</span>,),</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a> <span class="st">'../test_data/iaa_mnge/IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">62.5</span>,),</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a> <span class="st">'../test_data/iaa_mnge/IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">31.25</span>,),</span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a> <span class="st">'../test_data/iaa_mnge/IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">15.625</span>,)}</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a><span class="co"># error when expt vars isn't a consistent shape</span></span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>test_fail(<span class="kw">lambda</span>: ExperimentPlotter(fpath_to_experimental_vars <span class="op">|</span> {<span class="st">"IAA_62.5uM_MNGE_GCE_2_250206.txt"</span>: (<span class="fl">62.5</span>, <span class="dv">2</span>)}).fpath_to_experimental_vars)</span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a><span class="co"># error with nonexistent files</span></span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>test_fail(<span class="kw">lambda</span>: ExperimentPlotter({<span class="st">"a.csv"</span>: <span class="dv">1</span>, <span class="st">"b.csv"</span>: <span class="dv">2</span>, <span class="st">"c.csv"</span>: (<span class="dv">1</span>, <span class="dv">2</span>)}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-53" class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>fpaths_to_vars <span class="op">=</span> {<span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: (<span class="dv">7</span>,), <span class="co"># labeled 7</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: (<span class="dv">7</span>,), <span class="co"># also labeled 7, just to test when multiple fpaths map to a single var</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">31.25</span>,),</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">15.625</span>,)}</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>fpaths_to_vars <span class="op">=</span> {os.path.join(iaa_mnge_root, k): v <span class="cf">for</span> k, v <span class="kw">in</span> fpaths_to_vars.items()}</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>plot_specs <span class="op">=</span> ExperimentPlotter(fpaths_to_vars, <span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> uM"</span>).plot_specs</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>test([[[[arr[:<span class="dv">5</span>] <span class="cf">for</span> arr <span class="kw">in</span> trace[<span class="dv">0</span>]], trace[<span class="dv">1</span>]] <span class="cf">for</span> trace <span class="kw">in</span> plot_spec] <span class="cf">for</span> plot_spec <span class="kw">in</span> plot_specs], [[[[np.array([<span class="fl">0.202</span>, <span class="fl">0.204</span>, <span class="fl">0.206</span>, <span class="fl">0.208</span>, <span class="fl">0.21</span> ]),</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>    np.array([<span class="op">-</span><span class="fl">6.596e-07</span>, <span class="op">-</span><span class="fl">6.557e-07</span>, <span class="op">-</span><span class="fl">6.549e-07</span>, <span class="op">-</span><span class="fl">6.547e-07</span>, <span class="op">-</span><span class="fl">6.545e-07</span>])],</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>   {<span class="st">'color'</span>: <span class="st">'tab:blue'</span>, <span class="st">'label'</span>: <span class="st">'7 uM'</span>}],</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>  [[np.array([<span class="fl">0.202</span>, <span class="fl">0.204</span>, <span class="fl">0.206</span>, <span class="fl">0.208</span>, <span class="fl">0.21</span> ]),</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>    np.array([<span class="op">-</span><span class="fl">6.733e-07</span>, <span class="op">-</span><span class="fl">6.715e-07</span>, <span class="op">-</span><span class="fl">6.721e-07</span>, <span class="op">-</span><span class="fl">6.728e-07</span>, <span class="op">-</span><span class="fl">6.733e-07</span>])],</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>   {<span class="st">'color'</span>: <span class="st">'tab:blue'</span>}],</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>  [[np.array([<span class="fl">0.202</span>, <span class="fl">0.204</span>, <span class="fl">0.206</span>, <span class="fl">0.208</span>, <span class="fl">0.21</span> ]),</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>    np.array([<span class="op">-</span><span class="fl">6.862e-07</span>, <span class="op">-</span><span class="fl">6.799e-07</span>, <span class="op">-</span><span class="fl">6.774e-07</span>, <span class="op">-</span><span class="fl">6.759e-07</span>, <span class="op">-</span><span class="fl">6.741e-07</span>])],</span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>   {<span class="st">'color'</span>: <span class="st">'tab:orange'</span>, <span class="st">'label'</span>: <span class="st">'15.625 uM'</span>}],</span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>  [[np.array([<span class="fl">0.202</span>, <span class="fl">0.204</span>, <span class="fl">0.206</span>, <span class="fl">0.208</span>, <span class="fl">0.21</span> ]),</span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>    np.array([<span class="op">-</span><span class="fl">7.070e-07</span>, <span class="op">-</span><span class="fl">7.018e-07</span>, <span class="op">-</span><span class="fl">6.999e-07</span>, <span class="op">-</span><span class="fl">6.986e-07</span>, <span class="op">-</span><span class="fl">6.975e-07</span>])],</span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>   {<span class="st">'color'</span>: <span class="st">'tab:green'</span>, <span class="st">'label'</span>: <span class="st">'31.25 uM'</span>}]]], all_equal)</span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>mpl_wrapper(plot_specs[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-54" class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>fpaths_to_vars <span class="op">=</span> {<span class="st">'IAA_7.8125uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">7.8125</span>,), <span class="co"># correctly labeled</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_62.5uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">62.5</span>,), <span class="co"># correctly labeled</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_31.25uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">31.25</span>,),</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'IAA_15.625uM_MNGE_GCE_2_250206.txt'</span>: (<span class="fl">15.625</span>,)}</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>fpaths_to_vars <span class="op">=</span> {os.path.join(iaa_mnge_root, k): v <span class="cf">for</span> k, v <span class="kw">in</span> fpaths_to_vars.items()}</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>plot_specs <span class="op">=</span> ExperimentPlotter(fpaths_to_vars, <span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> uM IAA"</span>).plot_specs</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>test([[[[arr[:<span class="dv">5</span>] <span class="cf">for</span> arr <span class="kw">in</span> trace[<span class="dv">0</span>]], trace[<span class="dv">1</span>]] <span class="cf">for</span> trace <span class="kw">in</span> plot_spec] <span class="cf">for</span> plot_spec <span class="kw">in</span> plot_specs], [[[[np.array([<span class="fl">0.202</span>, <span class="fl">0.204</span>, <span class="fl">0.206</span>, <span class="fl">0.208</span>, <span class="fl">0.21</span> ]),</span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>    np.array([<span class="op">-</span><span class="fl">6.596e-07</span>, <span class="op">-</span><span class="fl">6.557e-07</span>, <span class="op">-</span><span class="fl">6.549e-07</span>, <span class="op">-</span><span class="fl">6.547e-07</span>, <span class="op">-</span><span class="fl">6.545e-07</span>])],</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>   {<span class="st">'color'</span>: <span class="st">'tab:blue'</span>, <span class="st">'label'</span>: <span class="st">'7.8125 uM IAA'</span>}],</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>  [[np.array([<span class="fl">0.202</span>, <span class="fl">0.204</span>, <span class="fl">0.206</span>, <span class="fl">0.208</span>, <span class="fl">0.21</span> ]),</span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>    np.array([<span class="op">-</span><span class="fl">6.862e-07</span>, <span class="op">-</span><span class="fl">6.799e-07</span>, <span class="op">-</span><span class="fl">6.774e-07</span>, <span class="op">-</span><span class="fl">6.759e-07</span>, <span class="op">-</span><span class="fl">6.741e-07</span>])],</span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>   {<span class="st">'color'</span>: <span class="st">'tab:orange'</span>, <span class="st">'label'</span>: <span class="st">'15.625 uM IAA'</span>}],</span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>  [[np.array([<span class="fl">0.202</span>, <span class="fl">0.204</span>, <span class="fl">0.206</span>, <span class="fl">0.208</span>, <span class="fl">0.21</span> ]),</span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>    np.array([<span class="op">-</span><span class="fl">7.070e-07</span>, <span class="op">-</span><span class="fl">7.018e-07</span>, <span class="op">-</span><span class="fl">6.999e-07</span>, <span class="op">-</span><span class="fl">6.986e-07</span>, <span class="op">-</span><span class="fl">6.975e-07</span>])],</span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>   {<span class="st">'color'</span>: <span class="st">'tab:green'</span>, <span class="st">'label'</span>: <span class="st">'31.25 uM IAA'</span>}],</span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a>  [[np.array([<span class="fl">0.202</span>, <span class="fl">0.204</span>, <span class="fl">0.206</span>, <span class="fl">0.208</span>, <span class="fl">0.21</span> ]),</span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a>    np.array([<span class="op">-</span><span class="fl">6.733e-07</span>, <span class="op">-</span><span class="fl">6.715e-07</span>, <span class="op">-</span><span class="fl">6.721e-07</span>, <span class="op">-</span><span class="fl">6.728e-07</span>, <span class="op">-</span><span class="fl">6.733e-07</span>])],</span>
+<span id="cb54-19"><a href="#cb54-19" aria-hidden="true" tabindex="-1"></a>   {<span class="st">'color'</span>: <span class="st">'tab:red'</span>, <span class="st">'label'</span>: <span class="st">'62.5 uM IAA'</span>}]]], all_equal)</span>
+<span id="cb54-20"><a href="#cb54-20" aria-hidden="true" tabindex="-1"></a>mpl_wrapper(plot_specs[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>now to test on palmsens</p>
+<div id="cell-56" class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>iaa_m9_pH_root <span class="op">=</span> <span class="st">"../test_data/iaa_m9_pH"</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>fpaths <span class="op">=</span> [os.path.join(iaa_m9_pH_root, basepath) <span class="cf">for</span> basepath <span class="kw">in</span> os.listdir(iaa_m9_pH_root)]</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>fpaths</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>after getting gpt to assign tuple values,</p>
+<div id="cell-58" class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>fpaths_to_vars <span class="op">=</span> {<span class="st">'../test_data/iaa_m9_pH/250211_IAA_31.25uM_inM9_pH7_GCE_DPV.csv'</span>: (<span class="fl">31.25</span>, <span class="dv">7</span>), <span class="st">'../test_data/iaa_m9_pH/250211_Blank_M9_pH5_GCE_DPV.csv'</span>: (<span class="dv">0</span>, <span class="dv">5</span>), <span class="st">'../test_data/iaa_m9_pH/250211_IAA_62.5uM_inM9_pH6_GCE_DPV.csv'</span>: (<span class="fl">62.5</span>, <span class="dv">6</span>), <span class="st">'../test_data/iaa_m9_pH/250211_IAA_62.5uM_inM9_pH5_GCE_DPV.csv'</span>: (<span class="fl">62.5</span>, <span class="dv">5</span>), <span class="st">'../test_data/iaa_m9_pH/250211_IAA_31.25uM_inM9_pH5_GCE_DPV.csv'</span>: (<span class="fl">31.25</span>, <span class="dv">5</span>), <span class="st">'../test_data/iaa_m9_pH/250211_IAA_31.25uM_inM9_pH6_GCE_DPV.csv'</span>: (<span class="fl">31.25</span>, <span class="dv">6</span>), <span class="st">'../test_data/iaa_m9_pH/250211_IAA_62.5uM_inM9_pH7_GCE_DPV.csv'</span>: (<span class="fl">62.5</span>, <span class="dv">7</span>), <span class="st">'../test_data/iaa_m9_pH/250211_Blank_M9_pH7_GCE_DPV.csv'</span>: (<span class="dv">0</span>, <span class="dv">7</span>), <span class="st">'../test_data/iaa_m9_pH/250211_Blank_M9_pH6_GCE_DPV.csv'</span>: (<span class="dv">0</span>, <span class="dv">6</span>)}</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>fpaths_to_vars</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-59" class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>plot_specs <span class="op">=</span> ExperimentPlotter(fpaths_to_vars, <span class="kw">lambda</span> tup: <span class="ss">f"IAA </span><span class="sc">{</span>tup[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> uM, pH </span><span class="sc">{</span><span class="bu">int</span>(tup[<span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>).plot_specs</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(plot_specs) <span class="op">==</span> <span class="dv">6</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(plot_specs)</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>mpl_wrapper(plot_specs[<span class="dv">2</span>], xlabel<span class="op">=</span><span class="st">"Potential (V)"</span>, ylabel<span class="op">=</span><span class="st">"Current (A)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Although the code is technically finished, there are a few things I don’t like: 1. We still need to pass xlabel and ylabel to mpl_wrapper. It feels like the plot specs should handle this, as it has the information of what we’re plotting 2. By having everything in the initialization, we don’t allow customization of any steps. A minimal problem right now but for more customization on graph creation, we’ll want to allow subclassing for customization. And then, generating the plots can be calculated on-demand by a method rather than at initialization.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bxw315-umd\.github\.io\/experiment-to-plot-framework");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/bxw315-umd/experiment-to-plot-framework/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
