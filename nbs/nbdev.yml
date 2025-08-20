@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "experiment-to-plot-framework"
+  site-url: "https://bxw315-umd.github.io/experiment-to-plot-framework"
+  description: "This framework takes an experimental dataset and automatically generates a series of plots demonstrating change in a single experimental variable."
+  repo-branch: main
+  repo-url: "https://github.com/bxw315-umd/experiment-to-plot-framework"
